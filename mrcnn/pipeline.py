@@ -25,7 +25,7 @@ class LungMapTrainingConfig(Config):
     IMAGES_PER_GPU = 1
     # Number of classification classes (including background)
     # TODO: update this to be automatic
-    NUM_CLASSES = 6  # Override in sub-classes
+    NUM_CLASSES = 2  # Override in sub-classes
     RPN_ANCHOR_SCALES = (32, 64, 128, 256, 512)  # anchor side in pixels
     STEPS_PER_EPOCH = 100
     TRAIN_ROIS_PER_IMAGE = 300
