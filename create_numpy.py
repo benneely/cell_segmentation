@@ -10,8 +10,12 @@ from skimage.draw import polygon
 CELL_SAVE = 'distal_acinar_tubule_cells'
 
 filenames = [
-    'via_region_data_1.json',
-    'via_region_data_2.json'
+    # 'via_region_data_1.json',
+    # 'via_region_data_2.json',
+    '2015-04-029_20X_C57Bl6_E16.5_LMM.14.24.4.46_SOX9_SFTPC_ACTA2_001__45.json',
+    '2015-04-029_20X_C57Bl6_E16.5_LMM.14.24.4.46_SOX9_SFTPC_ACTA2_001__47.json',
+    '2015-04-029_20X_C57Bl6_E16.5_LMM.14.24.4.46_SOX9_SFTPC_ACTA2_001__62.json',
+    '2015-04-029_20X_C57Bl6_E16.5_LMM.14.24.4.46_SOX9_SFTPC_ACTA2_001__66.json'
 ]
 
 jdat = {}
@@ -19,10 +23,15 @@ for file in filenames:
     complete_file_path = os.path.join(CELL_SAVE, file)
     with open(complete_file_path) as f:
         jdat.update(json.load(f))
-jdat.pop('2015-04-029_20X_C57Bl6_E16.5_LMM.14.24.4.46_SOX9_SFTPC_ACTA2_001__45.png41696')
+# jdat.pop('2015-04-029_20X_C57Bl6_E16.5_LMM.14.24.4.46_SOX9_SFTPC_ACTA2_001__45.png41696')
+final = {}
+for k, v in jdat.items():
+    if len(v['regions'])>0:
+        final[k] = v
+
 imgs = []
 masks = []
-for k, v in jdat.items():
+for k, v in final.items():
     img = imread(os.path.join(CELL_SAVE, v['filename']))
     mask = np.zeros(shape=(img.shape[0], img.shape[1], 1))
     images_resize = np.zeros(shape=((128, 128, 3)))
@@ -45,11 +54,11 @@ for k, v in jdat.items():
 final_images = np.stack(imgs)
 final_masks = np.stack(masks)
 
-np.save('images.npy', final_images)
-np.save('masks.npy', final_masks)
+# np.save('images.npy', final_images)
+# np.save('masks.npy', final_masks)
 
 
-for k, v in jdat.items():
+for k, v in final.items():
     img = imread(os.path.join(CELL_SAVE, v['filename']))
     print(v['filename'])
     plt.imshow(img)

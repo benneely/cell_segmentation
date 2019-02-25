@@ -22,6 +22,7 @@ import keras.backend as K
 import keras.layers as KL
 import keras.engine as KE
 import keras.models as KM
+from imgaug import augmenters as iaa
 
 from mrcnn import utils
 
@@ -2297,12 +2298,19 @@ class MaskRCNN():
         if layers in layer_regex.keys():
             layers = layer_regex[layers]
 
+        aug = iaa.OneOf([
+            iaa.Affine(rotate=45),
+            iaa.AdditiveGaussianNoise(scale=0.2 * 255),
+            iaa.Add(50, per_channel=True),
+            iaa.Sharpen(alpha=0.5)
+        ])
+
         # Data generators
         train_generator = data_generator(train_dataset, self.config, shuffle=True,
-                                         augmentation=augmentation,
+                                         augmentation=aug,
                                          batch_size=self.config.BATCH_SIZE)
         val_generator = data_generator(val_dataset, self.config, shuffle=True,
-                                       batch_size=self.config.BATCH_SIZE)
+                                       batch_size=self.config.BATCH_SIZE, augmentation=aug)
         a = next(val_generator)
 
         # Callbacks

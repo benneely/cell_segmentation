@@ -12,8 +12,10 @@ try:
 except ImportError:
     import cv2
 
-FORMAT = '%(asctime)-15s %(message)s'
-logging.basicConfig(format=FORMAT, level=logging.DEBUG)
+from mrcnn.common_utils.utils import display_instances
+
+# FORMAT = '%(asctime)-15s %(message)s'
+# logging.basicConfig(format=FORMAT, level=logging.DEBUG)
 
 
 class LungMapTrainingConfig(Config):
@@ -25,7 +27,7 @@ class LungMapTrainingConfig(Config):
     IMAGES_PER_GPU = 1
     # Number of classification classes (including background)
     # TODO: update this to be automatic
-    NUM_CLASSES = 2  # Override in sub-classes
+    NUM_CLASSES = 3  # Override in sub-classes
     RPN_ANCHOR_SCALES = (32, 64, 128, 256, 512)  # anchor side in pixels
     STEPS_PER_EPOCH = 100
     TRAIN_ROIS_PER_IMAGE = 300
@@ -153,8 +155,28 @@ class MrCNNPipeline(BasePipeline):
             model_dir=self.model_dir
         )
         model.load_weights(
-            os.path.join(self.model_dir, model_weights),
+            os.path.join(model_weights),
             by_name=True
+        )
+        a = model.detect([img], verbose=1)
+        display_instances(
+            image=img,
+            boxes=a[0]['rois'],
+            masks=a[0]['masks'],
+            class_ids=a[0]['class_ids'],
+            class_names=self.dataset_validation.class_names,
+            scores=a[0]['scores']
+        )
+
+        truth = self.dataset_test.load_mask(0, with_bb=True)
+
+        display_instances(
+            image=img,
+            boxes=truth[2],
+            masks=truth[0],
+            class_ids=truth[1],
+            class_names=self.dataset_validation.class_names,
+            scores=np.ones(truth[1].shape[0])
         )
 
         final = self._convert_to_contours(model.detect([img], verbose=1))
