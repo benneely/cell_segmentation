@@ -29,7 +29,7 @@ class LungMapTrainingConfig(Config):
     # TODO: update this to be automatic
     NUM_CLASSES = 3  # Override in sub-classes
     RPN_ANCHOR_SCALES = (32, 64, 128, 256, 512)  # anchor side in pixels
-    STEPS_PER_EPOCH = 100
+    STEPS_PER_EPOCH = 200
     TRAIN_ROIS_PER_IMAGE = 300
     VALIDATION_STEPS = 5
     IMAGE_MAX_DIM = 256
