@@ -41,7 +41,8 @@ filenames_mine = [
     'acta2_002_052.json',
     'acta2_002_102.json',
     'acta2_003_052.json',
-    'acta2_004_084.json'
+    'acta2_004_084.json',
+    'acta2_004_121.json'
 ]
 
 def extractit(filenames, cell_only=True):

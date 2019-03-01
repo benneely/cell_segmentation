@@ -2300,7 +2300,7 @@ class MaskRCNN():
 
         aug = iaa.SomeOf(2, [
             iaa.Fliplr(0.5),
-            iaa.Flipup(0.5)
+            iaa.Flipud(0.5)
         ])
 
         # Data generators
