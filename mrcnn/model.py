@@ -2298,11 +2298,9 @@ class MaskRCNN():
         if layers in layer_regex.keys():
             layers = layer_regex[layers]
 
-        aug = iaa.OneOf([
-            iaa.Affine(rotate=45),
-            iaa.AdditiveGaussianNoise(scale=0.2 * 255),
-            iaa.Add(50, per_channel=True),
-            iaa.Sharpen(alpha=0.5)
+        aug = iaa.SomeOf(2, [
+            iaa.Fliplr(0.5),
+            iaa.Flipup(0.5)
         ])
 
         # Data generators
