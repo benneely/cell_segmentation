@@ -42,7 +42,17 @@ filenames_mine = [
     'acta2_002_102.json',
     'acta2_003_052.json',
     'acta2_004_084.json',
-    'acta2_004_121.json'
+    'acta2_004_121.json',
+    'acta2_004_117.json',
+    'acta2_004_108.json',
+    'acta2_004_103.json',
+    'acta2_004_100.json',
+    'acta2_004_95.json',
+    'acta2_004_085.json',
+    'acta2_004_071.json',
+    'acta2_004_062.json',
+    'acta2_004_050.json'
+
 ]
 
 def extractit(filenames, cell_only=True):
@@ -76,6 +86,8 @@ def extractit(filenames, cell_only=True):
             new[v['filename']]['green'] = []
             new[v['filename']]['blue'] = []
             for key, value in v['regions'].items():
+                if 'label' not in list(value['region_attributes'].keys()):
+                    raise('Problem')
                 if value['region_attributes']['label'] in ['green cell', 'green']:
                     new[v['filename']]['green'].append(
                         [list(a) for a in zip(value['shape_attributes']['all_points_x'],value['shape_attributes']['all_points_y'])]
